@@ -1,5 +1,5 @@
 from colorama import init, Fore, Back, Style
-import helper_functions.client_helper_funcs as helper
+import helpers.client_helper_funcs as helper
 import numpy as np
 import constant
 

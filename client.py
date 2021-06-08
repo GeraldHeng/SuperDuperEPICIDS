@@ -1,6 +1,6 @@
 from opcua import Client
 from colorama import init, Fore, Back, Style
-import helper_functions.client_helper_funcs as madlad
+import helpers.client_helper_funcs as madlad
 import numpy as np
 import time
 from switch import Switch
@@ -255,7 +255,7 @@ class ServerClient:
             print(
                 Fore.GREEN + 'Case TIED1 TIED2 not called, switches not ON(CLOSE)')
             print()
-    
+
     def check_case_sied1_gied2(self):
         '''
         SIED1 should be equal to GIED2 If both switches, Q3-4, Q1A are ON(CLOSE).
@@ -370,6 +370,10 @@ class ServerClient:
 
         IED.define_ied('Transmission.TIED2.Measurement', madlad.dict, 'tied2',
                        self.variables, self.server)
+
+        # for key, val in madlad.dict.items():
+        #     print(key)
+        #     print(val)
 
         return self.variables
 
