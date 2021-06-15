@@ -24,8 +24,13 @@ MicroGrid = server.nodes.objects.add_folder(EPIC, "MicroGrid")  # 1
 Transmission = server.nodes.objects.add_folder(EPIC, "Transmission")  # 2
 Generation = server.nodes.objects.add_folder(EPIC, "Generation")  # 3
 SmartHome = server.nodes.objects.add_folder(EPIC, "SmartHome")  # 4
+common = server.nodes.objects.add_folder(EPIC, "common")  # 4
 
 variable_dict = {}
+ts = madlad.create_timestamp(
+    EPIC, common, 'common.', 'timestamp')  # 5
+variable_dict['timestamp'] = ts
+
 
 print('Setting up DB1 Switches...')
 Q1 = madlad.create_switch(
@@ -40,12 +45,12 @@ variable_dict['q1-1'] = Q1_1
 Q1_2 = madlad.create_switch(
     EPIC, Generation, 'Generation.Q1_2', '[01]', False, True)  # 17
 variable_dict['q1-2'] = Q1_2
-Q1_4 = madlad.create_switch(
-    EPIC, Generation, 'Generation.Q1_4', '[01]', False, True)
-variable_dict['q1-4'] = Q1_4
-Q1_5 = madlad.create_switch(
-    EPIC, Generation, 'Generation.Q1_5', '[01]', False, True)
-variable_dict['q1-5'] = Q1_5
+# Q1_4 = madlad.create_switch(
+#     EPIC, Generation, 'Generation.Q1_4', '[10]', False, True)
+# variable_dict['q1-4'] = Q1_4
+# Q1_5 = madlad.create_switch(
+#     EPIC, Generation, 'Generation.Q1_5', '[10]', False, True)
+# variable_dict['q1-5'] = Q1_5
 Q1_3 = madlad.create_switch(
     EPIC, Transmission, 'Transmission.Q1_3', '[10]', True, False)  # 21
 variable_dict['q1-3'] = Q1_3
@@ -85,7 +90,6 @@ MIED2 = madlad.create_meter(EPIC, MicroGrid, 'MicroGrid.MIED2')  # 105
 variable_dict['mied2'] = MIED2
 TIED4 = madlad.create_meter(EPIC, Transmission, 'Transmission.TIED4')  # 120
 variable_dict['tied4'] = TIED4
-
 
 print('Setting up DB2 AMI Meters...')
 MAMI1 = madlad.create_AMIMeter(EPIC, MicroGrid, 'MicroGrid.MAMI1', '1')  # 135
@@ -129,7 +133,6 @@ SAMI1 = madlad.create_AMIMeter(EPIC, MicroGrid, 'SmartHome.SAMI1', '1')  # 260
 SAMI2 = madlad.create_AMIMeter(EPIC, MicroGrid, 'SmartHome.SAMI2', '2')  # 270
 SAMI3 = madlad.create_AMIMeter(EPIC, MicroGrid, 'SmartHome.SAMI3', '3')  # 280
 
-
 try:
     print('Server Starting')
     server.start()
@@ -163,13 +166,23 @@ try:
             csv_reader = csv.DictReader(csv_file)
             for line in csv_reader:
                 print(line['Timestamp'])
-                for item in variable_dict.values():
-                    madlad.setting_values(item, line)
-                    for var in item.get_variables():
-                        if 'MicroGrid.MIED1.Measurement.V3' in var.get_browse_name().to_string():
-                            print('MicroGrid.MIED1.Measurement.V3 data')
-                            print(var.get_browse_name().to_string()
-                                  [2:], var.get_value())
+                # variable_dict['timestamp'] = line['Timestamp']
+                for key, value in variable_dict.items():
+                    if key != 'timestamp':
+                        madlad.setting_values(value, line)
+                    else:
+                        # print(value.get_browse_name().to_string())
+                        value.get_variables()[0].set_value(line['Timestamp'])
+
+                    # else:
+
+                    # for var in item.get_variables():
+                    #     print(var.get_browse_name().to_string()
+                    #           [2:], var.get_value())
+                        # if 'MicroGrid.MIED1.Measurement.V3' in var.get_browse_name().to_string():
+                        #     print('MicroGrid.MIED1.Measurement.V3 data')
+                        #     print(var.get_browse_name().to_string()
+                        #           [2:], var.get_value())
 
                 time.sleep(1)
 finally:

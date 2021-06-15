@@ -36,9 +36,9 @@ class Switch:
              self.status == '[10]') or \
             (self.is_close == 0 and self.is_open == 1 and
              self.status == '[01]'):
-            print(Fore.GREEN + self.name + ' switch status is consistent')
-            print(self.is_close, self.is_open, self.status)
-            print()
+            # print(Fore.GREEN + self.name + ' switch status is consistent')
+            # print(self.is_close, self.is_open, self.status)
+            # print()
             return True
         else:
             print(Fore.RED + self.name + ' switch status is NOT consistent')
@@ -46,6 +46,9 @@ class Switch:
             self.introduce()
             print()
             return False
+
+    def is_switch_close(self):
+        return self.is_close == 0 and self.is_open == 1 and self.status == '[01]'
 
     @ staticmethod
     def define_switch(node_name, node_dict, var_name, var_dict, server):
@@ -59,11 +62,11 @@ class Switch:
         Client server - a client to server.
         '''
         # Why do we need _ and _ui.
-        is_close = 0 if helper.get_node_value(
-            node_name + '.STATUS_CLOSE', server, node_dict) else 1
+        is_close = 1 if helper.get_node_value(
+            node_name + '.STATUS_CLOSE', server, node_dict) else 0
 
-        is_open = 0 if helper.get_node_value(
-            node_name + '.STATUS_OPEN', server, node_dict) else 1
+        is_open = 1 if helper.get_node_value(
+            node_name + '.STATUS_OPEN', server, node_dict) else 0
 
         status = helper.get_node_value(
             node_name + '.STATUS', server, node_dict)

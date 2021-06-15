@@ -40,60 +40,64 @@ class IED:
         current, voltage and power should be less than or equal to delta.
         '''
         is_consistent = True
-        print(Fore.GREEN + self.name + ' corresponding switch is OFF')
+        # print(Fore.GREEN + self.name + ' corresponding switch is OFF')
 
         # Current
-        if np.less(abs(self.current), constant.CURRENT_MARGIN).all():
-            print(Fore.GREEN + 'current is consistent')
+        if np.less(self.current, constant.CURRENT_MARGIN).all():
+            # print(Fore.GREEN + 'current is consistent')
+            v = 0
         else:
             print(Fore.RED + 'current is NOT consistent')
             is_consistent = False
-        print('current current:', abs(self.current))
-        print('margin current:', constant.CURRENT_MARGIN)
-        print()
+        # print('current current:', abs(self.current))
+        # print('margin current:', constant.CURRENT_MARGIN)
+        # print()
 
         # Voltage
-        if np.less(abs(self.voltage), constant.VOLTAGE_MARGIN).all():
-            print(Fore.GREEN + 'voltage is consistent')
-        else:
-            print(Fore.RED + 'voltage is NOT consistent')
-            is_consistent = False
-        print('current voltage:', abs(self.voltage))
-        print('margin voltage:', constant.VOLTAGE_MARGIN)
-        print()
+        # if np.less(self.voltage, constant.VOLTAGE_MARGIN).all():
+        #     print(Fore.GREEN + 'voltage is consistent')
+        # else:
+        #     print(Fore.RED + 'voltage is NOT consistent')
+        #     is_consistent = False
+        # print('current voltage:', abs(self.voltage))
+        # print('margin voltage:', constant.VOLTAGE_MARGIN)
+        # print()
 
         # Power Apparent
-        if np.less(abs(self.power_apparent), constant.POWER_MARGIN).all():
-            print(Fore.GREEN + 'power apparent is consistent')
+        if np.less(self.power_apparent, constant.POWER_MARGIN).all():
+            # print(Fore.GREEN + 'power apparent is consistent')
+            v = 0
         else:
             print(Fore.RED + 'power apparent is NOT consistent')
             is_consistent = False
-        print('current power apparent:', abs(self.power_apparent))
-        print('margin power:', constant.POWER_MARGIN)
-        print()
+        # print('current power apparent:', abs(self.power_apparent))
+        # print('margin power:', constant.POWER_MARGIN)
+        # print()
 
         # Power Reactive
-        if np.less(abs(self.power_reactive), constant.POWER_MARGIN).all():
-            print(Fore.GREEN + 'power reactive is consistent')
+        if np.less(self.power_reactive, constant.POWER_MARGIN).all():
+            # print(Fore.GREEN + 'power reactive is consistent')
+            v = 0
         else:
             print(Fore.RED + 'power reactive is NOT consistent')
             is_consistent = False
-        print('current power reactive:', abs(self.power_reactive))
-        print('margin power reactive:', constant.POWER_MARGIN)
-        print()
+        # print('current power reactive:', abs(self.power_reactive))
+        # print('margin power reactive:', constant.POWER_MARGIN)
+        # print()
 
         # Power Real
-        if np.less(abs(self.power_real), constant.POWER_MARGIN).all():
-            print(Fore.GREEN + 'power real is consistent')
+        if np.less(self.power_real, constant.POWER_MARGIN).all():
+            # print(Fore.GREEN + 'power real is consistent')
+            v = 0
         else:
             print(Fore.RED + 'power real is NOT consistent')
             is_consistent = False
-        print('current power real:', abs(self.power_real))
-        print('margin power real:', constant.POWER_MARGIN)
-        print()
+        # print('current power real:', abs(self.power_real))
+        # print('margin power real:', constant.POWER_MARGIN)
+        # print()
 
         if is_consistent:
-            print()
+            # print()
             return True
         else:
             print(Fore.RED + 'The current values are: ')
