@@ -181,8 +181,12 @@ class ServerClient:
         if self.variables['q1-4'].is_open == 0 and self.variables['q1-4'].is_close == 1:
             outlet_switch_close_count += 1
 
-        if np.less(abs((gied_sum/outlet_switch_close_count) - tied_sum),
-                   constant.CURRENT_MARGIN).all():
+        if outlet_switch_close_count == 0:
+            result = abs((gied_sum/outlet_switch_close_count))
+        else:
+            result = 0
+
+        if np.less((result- tied_sum), constant.CURRENT_MARGIN).all():
             print(Fore.GREEN + 'Case Generation is consistent')
             print()
             self.check_case_extended_generation(

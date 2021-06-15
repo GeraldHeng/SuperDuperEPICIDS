@@ -8,9 +8,6 @@ import datetime
 import time
 import sys
 import helpers.server_helper_funcs as madlad
-import datasets.configs.ied_configs as IEDConfigs
-import datasets.configs.ami_configs as AMIConfigs
-import time
 import constant
 import csv
 
@@ -166,10 +163,8 @@ try:
             csv_reader = csv.DictReader(csv_file)
             for line in csv_reader:
                 print(line['Timestamp'])
-                # madlad.setting_values(MIED1, line, '1')
-
                 for item in variable_dict.values():
-                    madlad.setting_values(item, line, '1')
+                    madlad.setting_values(item, line)
                     for var in item.get_variables():
                         if 'MicroGrid.MIED1.Measurement.V3' in var.get_browse_name().to_string():
                             print('MicroGrid.MIED1.Measurement.V3 data')

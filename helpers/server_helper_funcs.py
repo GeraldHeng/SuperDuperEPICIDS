@@ -3,7 +3,7 @@ import opcua
 from random import randint
 
 
-def setting_values(node: object, values: dict, deviceNo: str = None):
+def setting_values(node: object, values: dict,):
     '''
     Set values for each individual variable of input Node
 
@@ -90,86 +90,92 @@ def setting_values(node: object, values: dict, deviceNo: str = None):
                         sector, sectorLetter, node.get_browse_name().to_string()[-1])]))
 
         except Exception as e:
-            e
-            # print(str(e) +  ' is an error')
+            # e
+            print(str(e) + ' is an error')
             # print(var.get_browse_name().to_string())
 
-    # Set Values for AMI Meters
-    elif 'AMI' in node.get_browse_name().to_string():
-        if node.get_browse_name().to_string() == '2:MicroGrid.MAMI{}'.format(deviceNo):
-            sector = 'MicroGrid'
-            sectorLetter = 'M'
-        elif node.get_browse_name().to_string() == '2:Generation.GAMI{}'.format(deviceNo):
-            sector = 'Generation'
-            sectorLetter = 'G'
-        elif node.get_browse_name().to_string() == '2:SmartHome.SAMI{}'.format(deviceNo):
-            sectorLetter = 'SmartHome'
-            sectorLetter = 'S'
-        elif node.get_browse_name().to_string() == '2:Transmission.TAMI{}'.format(deviceNo):
-            sector = 'Transmission'
-            sectorLetter = 'T'
-        else:
-            raise Exception('Not a Valid Browse Name')
+    # # Set Values for AMI Meters
+    # elif 'AMI' in node.get_browse_name().to_string():
+    #     if node.get_browse_name().to_string() == '2:MicroGrid.MAMI{}'.format(deviceNo):
+    #         sector = 'MicroGrid'
+    #         sectorLetter = 'M'
+    #     elif node.get_browse_name().to_string() == '2:Generation.GAMI{}'.format(deviceNo):
+    #         sector = 'Generation'
+    #         sectorLetter = 'G'
+    #     elif node.get_browse_name().to_string() == '2:SmartHome.SAMI{}'.format(deviceNo):
+    #         sectorLetter = 'SmartHome'
+    #         sectorLetter = 'S'
+    #     elif node.get_browse_name().to_string() == '2:Transmission.TAMI{}'.format(deviceNo):
+    #         sector = 'Transmission'
+    #         sectorLetter = 'T'
+    #     else:
+    #         raise Exception('Not a Valid Browse Name')
 
-        try:
+    #     try:
 
-            for var in node.get_variables():
-                if var.get_browse_name().to_string() == '2:{}.{}AMI{}.Voltage_L1'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Voltage_L1'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Voltage_L2'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Voltage_L2'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Voltage_L3'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Voltage_L3'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Current_L1'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Current_L1'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Current_L2'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Current_L2'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Current_L3'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Current_L3'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Active_Energy_KWh'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Active_Energy_KWh'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Power_Factor'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Power_Factor'.format(
-                        sector, sectorLetter, deviceNo)])
-                elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Power_Frequency'.format(sector, sectorLetter, deviceNo):
-                    var.set_value(values['{}.{}AMI{}.Power_Frequency'.format(
-                        sector, sectorLetter, deviceNo)])
-        except Exception as e:
-            print(e)
+    #         for var in node.get_variables():
+    #             if var.get_browse_name().to_string() == '2:{}.{}AMI{}.Voltage_L1'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Voltage_L1'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Voltage_L2'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Voltage_L2'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Voltage_L3'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Voltage_L3'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Current_L1'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Current_L1'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Current_L2'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Current_L2'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Current_L3'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Current_L3'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Active_Energy_KWh'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Active_Energy_KWh'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Power_Factor'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Power_Factor'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #             elif var.get_browse_name().to_string() == '2:{}.{}AMI{}.Power_Frequency'.format(sector, sectorLetter, deviceNo):
+    #                 var.set_value(values['{}.{}AMI{}.Power_Frequency'.format(
+    #                     sector, sectorLetter, deviceNo)])
+    #     except Exception as e:
+    #         print(e)
     else:
         try:
             for var in node.get_variables():
                 # print(var.get_browse_name().to_string()[2:])
 
                 if 'STATUS_OPEN' in var.get_browse_name().to_string():
-                    # print('open' + values[var.get_browse_name().to_string()[2:]])
+                    # print(
+                    #     'open' + values[var.get_browse_name().to_string()[2:]])
                     var.set_value(
-                        1 if values[var.get_browse_name().to_string()[2:]] == 'True' else 0)
-    
-                    # print((1 if values[var.get_browse_name().to_string()[2:]] == 'True' else 0))
+                        1 if values[var.get_browse_name().to_string()[2:]] == 'True' or
+                        values[var.get_browse_name().to_string()[2:]] == 'TRUE' else 0)
+                    # print(
+                    #     (1 if values[var.get_browse_name().to_string()[2:]] == 'True' or
+                    #      values[var.get_browse_name().to_string()[2:]] == 'TRUE' else 0))
 
                 elif 'STATUS_CLOSE' in var.get_browse_name().to_string():
-                    # print('close')
+                    # print(
+                    #     'close' + values[var.get_browse_name().to_string()[2:]])
                     var.set_value(
-                        1 if values[var.get_browse_name().to_string()[2:]] == 'True' else 0)
-                    # print((1 if values[var.get_browse_name().to_string()[2:]] == 'True' else 0))
+                        1 if values[var.get_browse_name().to_string()[2:]] == 'True' or
+                        values[var.get_browse_name().to_string()[2:]] == 'TRUE' else 0)
+                    # print(
+                    #     (1 if values[var.get_browse_name().to_string()[2:]] == 'True' or
+                    #      values[var.get_browse_name().to_string()[2:]] == 'TRUE' else 0))
                 else:
                     # print('statu')
                     var.set_value(
                         values[var.get_browse_name().to_string()[2:]])
                     # print(values[var.get_browse_name().to_string()[2:]])
-                    
 
         except Exception as e:
             e
-            # print(str(e) + 'is an error')
+            print(str(e) + 'is an error')
 
 
 def make_writable(node: object):

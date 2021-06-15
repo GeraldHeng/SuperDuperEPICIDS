@@ -37,6 +37,7 @@ class Switch:
             (self.is_close == 0 and self.is_open == 1 and
              self.status == '[01]'):
             print(Fore.GREEN + self.name + ' switch status is consistent')
+            print(self.is_close, self.is_open, self.status)
             print()
             return True
         else:
