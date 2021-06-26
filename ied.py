@@ -39,6 +39,7 @@ class IED:
         Using corresponding switch of IED, if switch is OFF(OPEN) then
         current, voltage and power should be less than or equal to delta.
         '''
+        # print(self.name)
         is_consistent = True
         # print(Fore.GREEN + self.name + ' corresponding switch is OFF')
 
@@ -55,7 +56,8 @@ class IED:
 
         # Voltage
         # if np.less(self.voltage, constant.VOLTAGE_MARGIN).all():
-        #     print(Fore.GREEN + 'voltage is consistent')
+        #     # print(Fore.GREEN + 'voltage is consistent')
+        #     v = 0
         # else:
         #     print(Fore.RED + 'voltage is NOT consistent')
         #     is_consistent = False

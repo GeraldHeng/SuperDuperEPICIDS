@@ -61,7 +61,7 @@ class ServerClient:
 
                 if val.name == 'q1' and not val.is_switch_close():
                     self.variables['gied1'].check_off_consistency()
-                if val.name == 'q1-a' and not val.is_switch_close():
+                if val.name == 'q1a' and not val.is_switch_close():
                     self.variables['gied2'].check_off_consistency()
 
                 if val.name == 'q2b' and not val.is_switch_close():

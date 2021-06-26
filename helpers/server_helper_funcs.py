@@ -188,7 +188,7 @@ def setting_values(node: object, values: dict,):
                     #      values[var.get_browse_name().to_string()[2:]] == 'TRUE' else 0))
                 elif 'STATUS' in var.get_browse_name().to_string() and \
                         'MODE_STATUS' not in var.get_browse_name().to_string():
-                    # print('statu')
+                    print('status', values[var.get_browse_name().to_string()[2:]])
                     var.set_value(
                         values[var.get_browse_name().to_string()[2:]])
                     # print(values[var.get_browse_name().to_string()[2:]])

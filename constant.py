@@ -45,6 +45,10 @@ START_FLAG = 'Start_Flag'
 STOP = 'Stop'
 STOP_FLAG = 'Stop_Flag'
 
+# TYPE
+SWITCH = 'switch'
+IED = 'ied'
+
 DATA = '../data/'
 SCENARIO_1_NAME = 'scenario 1'
 SCENARIO_1_PATH = DATA + 'Scenario_1/EpicLog_Scenario 1_19_Oct_2018_14_44.csv'
@@ -62,3 +66,42 @@ SCENARIO_7_PATH = DATA + 'Scenario_7/EpicLog_Scenario 7_07_Nov_2018_14_40.csv'
 SCENARIO_7_NAME = 'scenario 7'
 SCENARIO_8_PATH = DATA + 'Scenario_8/EpicLog_Scenario 8_07_Nov_2018_14_57.csv'
 SCENARIO_8_NAME = 'scenario 8'
+
+VALUES = {
+    'MicroGrid': {
+        'Q2': {'type': SWITCH},
+        'Q2A': {'type': SWITCH},
+        'Q2B': {'type': SWITCH},
+        'Q2C': {'type': SWITCH},
+        'MIED1': {'type': IED},
+        'MIED2': {'type': IED}
+    },
+    'SmartHome': {
+        'Q3-1': {'type': SWITCH},
+        'Q3-2': {'type': SWITCH},
+        'Q3-3': {'type': SWITCH},
+        'Q3-4': {'type': SWITCH},
+        'SIED1': {'type': IED},
+        'SIED2': {'type': IED},
+        'SIED3': {'type': IED},
+        'SIED4': {'type': IED}
+    },
+    'Generation': {
+        'Q1': {'type': SWITCH},
+        'Q1A': {'type': SWITCH},
+        'Q1-1': {'type': SWITCH},
+        'Q1-2': {'type': SWITCH},
+        'Q1-4': {'type': SWITCH},
+        'Q1-5': {'type': SWITCH},
+        'GIED1': {'type': IED},
+        'GIED2': {'type': IED}
+    },
+    'Transmission': {
+        'Q1-3': {'type': SWITCH},
+        'TIED1': {'type': IED},
+        'Q2-1': {'type': SWITCH},
+        'TIED4': {'type': IED},
+        'Q3': {'type': SWITCH},
+        'TIED2': {'type': IED},
+    }
+}
