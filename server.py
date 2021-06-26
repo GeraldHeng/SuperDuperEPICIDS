@@ -45,7 +45,7 @@ for component, component_val in constant.VALUES.items():
 
                 if item_val['type'] is constant.SWITCH:
                     item_created = madlad.create_switch(
-                        EPIC, component_val['node_val'], (component + '.' + item), '[01]', False, True)
+                        EPIC, component_val['node_val'], (component + '.' + item))
                 elif item_val['type'] is constant.IED:
                     item_created = madlad.create_meter(
                         EPIC, component_val['node_val'], (component + '.' + item))
@@ -99,6 +99,7 @@ try:
             print('Please select a valid path')
             continue
 
+        # Open respective scenario file and run.
         with open(chosen_scenario_path, mode='r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for line in csv_reader:
