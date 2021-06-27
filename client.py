@@ -5,6 +5,7 @@ import numpy as np
 import time
 from switch import Switch
 from ied import IED
+from case import Case
 import constant
 
 
@@ -51,32 +52,9 @@ class ServerClient:
         for key, val in self.variables.items():
             if type(val) is Switch:
                 val.check_consistency()
-
-                if val.name == 'q1-3' and not val.is_switch_close():
-                    self.variables['tied1'].check_off_consistency()
-                if val.name == 'q2-1' and not val.is_switch_close():
-                    self.variables['tied4'].check_off_consistency()
-                if val.name == 'q3' and not val.is_switch_close():
-                    self.variables['tied2'].check_off_consistency()
-
-                if val.name == 'q1' and not val.is_switch_close():
-                    self.variables['gied1'].check_off_consistency()
-                if val.name == 'q1a' and not val.is_switch_close():
-                    self.variables['gied2'].check_off_consistency()
-
-                if val.name == 'q2b' and not val.is_switch_close():
-                    self.variables['mied1'].check_off_consistency()
-                if val.name == 'q2c' and not val.is_switch_close():
-                    self.variables['mied2'].check_off_consistency()
-
-                if val.name == 'q3-1' and not val.is_switch_close():
-                    self.variables['sied4'].check_off_consistency()
-                if val.name == 'q3-2' and not val.is_switch_close():
-                    self.variables['sied3'].check_off_consistency()
-                if val.name == 'q3-3' and not val.is_switch_close():
-                    self.variables['sied2'].check_off_consistency()
-                if val.name == 'q3-4' and not val.is_switch_close():
-                    self.variables['sied1'].check_off_consistency()
+                if not val.is_switch_close() and val.connected_to is not None:
+                    self.variables[val.connected_to.lower()
+                                   ].check_off_consistency()
 
     def check_case_smart_home(self):
         '''
@@ -104,6 +82,11 @@ class ServerClient:
 
         if np.less(abs(tied_sum - sied_sum), constant.CURRENT_MARGIN).all():
             # print(Fore.GREEN + 'Case Smart Home is consistent')
+            # print()
+            # print(Fore.RED + 'Case Smart Home is NOT consistent')
+            # print('tied_sum Value ' + str(tied_sum))
+            # print('sied_sum Value ' + str(sied_sum))
+            # print('abs', abs(tied_sum - sied_sum))
             # print()
             return True
         else:
@@ -334,95 +317,22 @@ class ServerClient:
         '''
         Update variables with all the switches and ieds.
         '''
-        # print(helper.dict.keys())
-        # DB - 1 (GENERATION)
-        Switch.define_switch('Generation.Q1', helper.dict, 'q1',
-                             self.variables, self.server)
+        for component, component_val in constant.VALUES.items():
+            for item, item_val in component_val.items():
+                if item_val['type'] is 'switch':
+                    if 'connected_to' in item_val:
+                        connected_to = item_val['connected_to']
+                    else:
+                        connected_to = None
 
-        IED.define_ied('Generation.GIED1.Measurement', helper.dict, 'gied1',
-                       self.variables, self.server)
-
-        Switch.define_switch('Generation.Q1A', helper.dict, 'q1a',
-                             self.variables, self.server)
-
-        IED.define_ied('Generation.GIED2.Measurement', helper.dict, 'gied2',
-                       self.variables, self.server)
-
-        Switch.define_switch('Generation.Q1_1', helper.dict, 'q1-1',
-                             self.variables, self.server)
-
-        Switch.define_switch('Generation.Q1_2', helper.dict, 'q1-2',
-                             self.variables, self.server)
-
-        # Switch.define_switch('Generation.Q1_4', helper.dict, 'q1-4',
-        #                      self.variables, self.server)
-
-        # Switch.define_switch('Generation.Q1_5', helper.dict, 'q1-5',
-        #                      self.variables, self.server)
-
-        Switch.define_switch('Transmission.Q1_3', helper.dict, 'q1-3',
-                             self.variables, self.server)
-
-        IED.define_ied('Transmission.TIED1.Measurement', helper.dict, 'tied1',
-                       self.variables, self.server)
-
-        # # DB - 2 (MICRO GRID)
-        Switch.define_switch('MicroGrid.Q2B', helper.dict, 'q2b',
-                             self.variables, self.server)
-        IED.define_ied('MicroGrid.MIED1.Measurement', helper.dict, 'mied1',
-                       self.variables, self.server)
-
-        Switch.define_switch('MicroGrid.Q2C', helper.dict, 'q2c',
-                             self.variables, self.server)
-        IED.define_ied('MicroGrid.MIED2.Measurement', helper.dict, 'mied2',
-                       self.variables, self.server)
-
-        Switch.define_switch('MicroGrid.Q2', helper.dict, 'q2',
-                             self.variables, self.server)
-
-        Switch.define_switch('MicroGrid.Q2A', helper.dict, 'q2a',
-                             self.variables, self.server)
-
-        Switch.define_switch('Transmission.Q2_1', helper.dict, 'q2-1',
-                             self.variables, self.server)
-        IED.define_ied('Transmission.TIED4.Measurement', helper.dict, 'tied4',
-                       self.variables, self.server)
-
-        # # DB - 3 (SMART HOME)
-        Switch.define_switch('SmartHome.Q3_4', helper.dict, 'q3-4',
-                             self.variables, self.server)
-
-        IED.define_ied('SmartHome.SIED1.Measurement', helper.dict,
-                       'sied1', self.variables, self.server)
-
-        Switch.define_switch('SmartHome.Q3_3', helper.dict, 'q3-3',
-                             self.variables, self.server)
-
-        IED.define_ied('SmartHome.SIED2.Measurement', helper.dict, 'sied2',
-                       self.variables, self.server)
-
-        Switch.define_switch('SmartHome.Q3_2', helper.dict, 'q3-2',
-                             self.variables, self.server)
-
-        IED.define_ied('SmartHome.SIED3.Measurement', helper.dict, 'sied3',
-                       self.variables, self.server)
-
-        Switch.define_switch('SmartHome.Q3_1', helper.dict, 'q3-1',
-                             self.variables, self.server)
-
-        IED.define_ied('SmartHome.SIED4.Measurement', helper.dict, 'sied4',
-                       self.variables, self.server)
-
-        Switch.define_switch('Transmission.Q3', helper.dict, 'q3',
-                             self.variables, self.server)
-
-        IED.define_ied('Transmission.TIED2.Measurement', helper.dict, 'tied2',
-                       self.variables, self.server)
+                    Switch.define_switch((component + '.' + item.replace('-', '_')), helper.dict, item.lower(),
+                                         self.variables, self.server, connected_to)
+                elif item_val['type'] is 'ied':
+                    IED.define_ied((component + '.' + item.replace('-', '_')), helper.dict, item.lower(),
+                                   self.variables, self.server)
 
         self.variables['timestamp'] = helper.get_node_value(
             'timestamp', self.server, helper.dict)
-
-        # helper.dict['timestamp']
 
         return self.variables
 
@@ -434,11 +344,24 @@ def main():
     while 1:
         serverClient.update_client_object()
 
-        print('\n'+ Fore.CYAN + serverClient.get_timestamp() + '\n')
+        print('\n' + Fore.CYAN + serverClient.get_timestamp() + '\n')
         serverClient.check_all_variable_consistency()
+        # case_smart_home = Case('Smart Home Check', 'current', 'summation_equal',
+        #                        [[
+        #                            serverClient.variables['tied2'], serverClient.variables['tied4']
+        #                        ],
+        #                            [
+        #                            serverClient.variables['sied1'], serverClient.variables['sied2'],
+        #                            serverClient.variables['sied3'], serverClient.variables['sied4'],
+        #                        ]
+        #                        ])
+        # case_smart_home.get_result()
         serverClient.check_case_smart_home()
+        case_smart_home.get_result()
         serverClient.check_case_micro_grid()
+
         serverClient.check_case_generation()
+
         serverClient.check_case_tied1_tied2()
         serverClient.check_case_sied1_gied2()
         time.sleep(1)

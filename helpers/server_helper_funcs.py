@@ -83,7 +83,6 @@ def setting_values(node: object, values: dict,):
                     if val in var.get_browse_name().to_string():
                         is_correct_value = True
 
-                print(var.get_browse_name().to_string())
                 if is_correct_value:
                     if 'OPEN' in var.get_browse_name().to_string() or 'CLOSE' in var.get_browse_name().to_string():
                         var.set_value(

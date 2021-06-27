@@ -78,40 +78,40 @@ SWITCH_VALUES = [
 # Components and items of SLD to be defined here.
 VALUES = {
     'MicroGrid': {
+        'MIED1': {'type': IED},
+        'MIED2': {'type': IED},
         'Q2': {'type': SWITCH},
         'Q2A': {'type': SWITCH},
-        'Q2B': {'type': SWITCH},
-        'Q2C': {'type': SWITCH},
-        'MIED1': {'type': IED},
-        'MIED2': {'type': IED}
+        'Q2B': {'type': SWITCH, 'connected_to': 'MIED1'},
+        'Q2C': {'type': SWITCH, 'connected_to': 'MIED2'}
     },
     'SmartHome': {
-        'Q3-1': {'type': SWITCH},
-        'Q3-2': {'type': SWITCH},
-        'Q3-3': {'type': SWITCH},
-        'Q3-4': {'type': SWITCH},
         'SIED1': {'type': IED},
         'SIED2': {'type': IED},
         'SIED3': {'type': IED},
-        'SIED4': {'type': IED}
+        'SIED4': {'type': IED},
+        'Q3-1': {'type': SWITCH, 'connected_to': 'SIED4'},
+        'Q3-2': {'type': SWITCH, 'connected_to': 'SIED3'},
+        'Q3-3': {'type': SWITCH, 'connected_to': 'SIED2'},
+        'Q3-4': {'type': SWITCH, 'connected_to': 'SIED1'}
     },
     'Generation': {
-        'Q1': {'type': SWITCH},
-        'Q1A': {'type': SWITCH},
+        'GIED1': {'type': IED},
+        'GIED2': {'type': IED},
+        'Q1': {'type': SWITCH, 'connected_to': 'GIED1'},
+        'Q1A': {'type': SWITCH, 'connected_to': 'GIED2'},
         'Q1-1': {'type': SWITCH},
         'Q1-2': {'type': SWITCH},
-        'Q1-4': {'type': SWITCH},
-        'Q1-5': {'type': SWITCH},
-        'GIED1': {'type': IED},
-        'GIED2': {'type': IED}
+        # 'Q1-4': {'type': SWITCH},
+        # 'Q1-5': {'type': SWITCH},
     },
     'Transmission': {
-        'Q1-3': {'type': SWITCH},
         'TIED1': {'type': IED},
-        'Q2-1': {'type': SWITCH},
         'TIED4': {'type': IED},
-        'Q3': {'type': SWITCH},
         'TIED2': {'type': IED},
+        'Q3': {'type': SWITCH, 'connected_to': 'TIED2'},
+        'Q1-3': {'type': SWITCH, 'connected_to': 'TIED1'},
+        'Q2-1': {'type': SWITCH, 'connected_to': 'TIED4'},
     }
 }
 

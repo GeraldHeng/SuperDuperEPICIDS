@@ -120,37 +120,39 @@ class IED:
         # Define I (current) - i + var_name
         # Define V (voltage) - v + var_name
         # Define P (power) - p + var_name
-
+        # TODO:Find a way to make this modular, don need the name for voltage, current and power.
         # I (current)
         current = np.array(
-            [helper.get_node_value(node_name + '.L1_Current', server, node_dict),
+            [helper.get_node_value(node_name + '.Measurement.L1_Current', server, node_dict),
              helper.get_node_value(
-                 node_name + '.L2_Current', server, node_dict),
-             helper.get_node_value(
-                 node_name + '.L2_Current', server, node_dict),
-             helper.get_node_value(node_name + '.L3_Current', server, node_dict)])
+                 node_name + '.Measurement.L2_Current', server, node_dict),
+             helper.get_node_value(node_name + '.Measurement.L3_Current', server, node_dict)])
 
         # V (voltage)
         voltage = np.array(
-            [helper.get_node_value(node_name + '.V1', server, node_dict),
-             helper.get_node_value(node_name + '.V2', server, node_dict),
-             helper.get_node_value(node_name + '.V3', server, node_dict),
-             helper.get_node_value(node_name + '.VL1_L2', server, node_dict),
-             helper.get_node_value(node_name + '.VL2_L3', server, node_dict),
-             helper.get_node_value(node_name + '.VL3_VL1', server, node_dict)])
+            [helper.get_node_value(node_name + '.Measurement.V1', server, node_dict),
+             helper.get_node_value(
+                 node_name + '.Measurement.V2', server, node_dict),
+             helper.get_node_value(
+                 node_name + '.Measurement.V3', server, node_dict),
+             helper.get_node_value(
+                 node_name + '.Measurement.VL1_L2', server, node_dict),
+             helper.get_node_value(
+                 node_name + '.Measurement.VL2_L3', server, node_dict),
+             helper.get_node_value(node_name + '.Measurement.VL3_VL1', server, node_dict)])
 
         # P (power)
         # Apparent
         power_apparent = np.array(
-            [helper.get_node_value(node_name + '.Apparent', server, node_dict)])
+            [helper.get_node_value(node_name + '.Measurement.Apparent', server, node_dict)])
 
         # Reactive
         power_reactive = np.array(
-            [helper.get_node_value(node_name + '.Reactive', server, node_dict)])
+            [helper.get_node_value(node_name + '.Measurement.Reactive', server, node_dict)])
 
         # Real
         power_real = np.array(
-            [helper.get_node_value(node_name + '.Real', server, node_dict)])
+            [helper.get_node_value(node_name + '.Measurement.Real', server, node_dict)])
 
         var_dict[var_name] = IED(var_name, current, voltage,
                                  power_apparent, power_reactive,

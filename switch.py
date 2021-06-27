@@ -1,8 +1,9 @@
 from colorama import init, Fore, Back, Style
 import helpers.client_helper_funcs as helper
 
+
 class Switch:
-    def __init__(self, name, is_close, is_open, status):
+    def __init__(self, name, is_close, is_open, status, connected_to):
         '''
         @Params
         String name - name of the switch.
@@ -14,6 +15,7 @@ class Switch:
         self.is_close = is_close
         self.is_open = is_open
         self.status = status
+        self.connected_to = connected_to
 
     def introduce(self):
         '''
@@ -36,9 +38,6 @@ class Switch:
              self.status == '[10]') or \
             (self.is_close == 0 and self.is_open == 1 and
              self.status == '[01]'):
-            # print(Fore.GREEN + self.name + ' switch status is consistent')
-            # print(self.is_close, self.is_open, self.status)
-            # print()
             return True
         else:
             print(Fore.RED + self.name + ' switch status is NOT consistent')
@@ -48,13 +47,15 @@ class Switch:
             return False
 
     def is_switch_close(self):
+        '''
+        Check is switch is close(ON) or open(OFF).
+        '''
         return self.is_close == 0 and self.is_open == 1 and self.status == '[01]'
 
     @ staticmethod
-    def define_switch(node_name, node_dict, var_name, var_dict, server):
+    def define_switch(node_name, node_dict, var_name, var_dict, server, connected_to):
         '''
         Define switch with values.
-        @Param
         String node_name - eg. Generation.Q1.
         Dict node_dict - where the node is stored.
         String var_name - variable name to define for var_dict.
@@ -71,5 +72,5 @@ class Switch:
         status = helper.get_node_value(
             node_name + '.STATUS', server, node_dict)
 
-     
-        var_dict[var_name] = Switch(var_name, is_close, is_open, status)
+        var_dict[var_name] = Switch(
+            var_name, is_close, is_open, status, connected_to)
