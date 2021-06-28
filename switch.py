@@ -3,7 +3,7 @@ import helpers.client_helper_funcs as helper
 
 
 class Switch:
-    def __init__(self, name, is_close, is_open, status, connected_to):
+    def __init__(self, name, is_close, is_open, status, connected_to, origin):
         '''
         @Params
         String name - name of the switch.
@@ -12,10 +12,12 @@ class Switch:
         String status (UI) - [01] or [10].
         '''
         self.name = name
+        self.type = 'switch'
         self.is_close = is_close
         self.is_open = is_open
         self.status = status
         self.connected_to = connected_to
+        self.origin = origin
 
     def introduce(self):
         '''
@@ -30,8 +32,8 @@ class Switch:
         '''
         Check value of is_close, is_open and status align with each other.
         2 case.
-        is_cose is 1 and is_open is 0 then status is [10]
-        is_cose is 0 and is_open is 1 then status is [01]
+        is_close is 1 and is_open is 0 then status is [10]
+        is_close is 0 and is_open is 1 then status is [01]
         '''
         if \
             (self.is_close == 1 and self.is_open == 0 and
@@ -53,7 +55,7 @@ class Switch:
         return self.is_close == 0 and self.is_open == 1 and self.status == '[01]'
 
     @ staticmethod
-    def define_switch(node_name, node_dict, var_name, var_dict, server, connected_to):
+    def define_switch(node_name, node_dict, var_name, var_dict, server, connected_to, origin):
         '''
         Define switch with values.
         String node_name - eg. Generation.Q1.
@@ -73,4 +75,4 @@ class Switch:
             node_name + '.STATUS', server, node_dict)
 
         var_dict[var_name] = Switch(
-            var_name, is_close, is_open, status, connected_to)
+            var_name, is_close, is_open, status, connected_to, origin)

@@ -6,7 +6,7 @@ import constant
 
 class IED:
     def __init__(self, name, current, voltage, power_apparent, power_reactive,
-                 power_real):
+                 power_real, origin):
         '''
         @Params
         String name - name of the ied.
@@ -17,11 +17,13 @@ class IED:
         List power_real - power_real values.
         '''
         self.name = name
+        self.type = 'ied'
         self.current = current
         self.voltage = voltage
         self.power_apparent = power_apparent
         self.power_reactive = power_reactive
         self.power_real = power_real
+        self.origin = origin
 
     def introduce(self):
         '''
@@ -41,7 +43,6 @@ class IED:
         '''
         # print(self.name)
         is_consistent = True
-        # print(Fore.GREEN + self.name + ' corresponding switch is OFF')
 
         # Current
         if np.less(self.current, constant.CURRENT_MARGIN).all():
@@ -50,9 +51,6 @@ class IED:
         else:
             print(Fore.RED + 'current is NOT consistent')
             is_consistent = False
-        # print('current current:', abs(self.current))
-        # print('margin current:', constant.CURRENT_MARGIN)
-        # print()
 
         # Voltage
         # if np.less(self.voltage, constant.VOLTAGE_MARGIN).all():
@@ -72,9 +70,6 @@ class IED:
         else:
             print(Fore.RED + 'power apparent is NOT consistent')
             is_consistent = False
-        # print('current power apparent:', abs(self.power_apparent))
-        # print('margin power:', constant.POWER_MARGIN)
-        # print()
 
         # Power Reactive
         if np.less(self.power_reactive, constant.POWER_MARGIN).all():
@@ -83,9 +78,6 @@ class IED:
         else:
             print(Fore.RED + 'power reactive is NOT consistent')
             is_consistent = False
-        # print('current power reactive:', abs(self.power_reactive))
-        # print('margin power reactive:', constant.POWER_MARGIN)
-        # print()
 
         # Power Real
         if np.less(self.power_real, constant.POWER_MARGIN).all():
@@ -94,9 +86,6 @@ class IED:
         else:
             print(Fore.RED + 'power real is NOT consistent')
             is_consistent = False
-        # print('current power real:', abs(self.power_real))
-        # print('margin power real:', constant.POWER_MARGIN)
-        # print()
 
         if is_consistent:
             # print()
@@ -107,7 +96,7 @@ class IED:
             print()
 
     @staticmethod
-    def define_ied(node_name, node_dict, var_name, var_dict, server):
+    def define_ied(node_name, node_dict, var_name, var_dict, server, origin):
         '''
         Define ied with values.
         @Param 
@@ -156,4 +145,4 @@ class IED:
 
         var_dict[var_name] = IED(var_name, current, voltage,
                                  power_apparent, power_reactive,
-                                 power_real)
+                                 power_real, origin)

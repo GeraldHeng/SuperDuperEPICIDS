@@ -1,6 +1,8 @@
 # ------------------------- COMMON -------------------------------------
 # MARGINS VALUES
-CURRENT_MARGIN = 0.5  # 0.45 3
+# CURRENT_MARGIN = 0.5  # 0.45 3
+# BASED ON 5% of all current values.
+CURRENT_MARGIN = 2.881219719237589
 VOLTAGE_MARGIN = 4.5  # 10% 245 / 420
 POWER_MARGIN = 175  # 150 (2150)
 

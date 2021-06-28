@@ -1,0 +1,67 @@
+<div class="row gy-5" id="load-components">
+    {% for origin_name in origins %}
+    <h3>{{origin_name}}</h1>
+        {% for component in origins[origin_name] %} {% if component.type
+            == 'ied' %}
+            <div class="col-sm-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{component.name.upper()}}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">IED</h6>
+                  <p class="card-text">
+                    Current: {{component.current}} <br />
+                    Voltage: {{component.voltage}}<br />
+                    Power Real: {{component.power_real}}<br />
+                    Power Reactive: {{component.power_reactive}}<br />
+                    Power Apparent: {{component.power_apparent}}<br />
+                  </p>
+                </div>
+              </div>
+            </div>
+            {% elif component.type == 'switch' %}
+            <div class="col-sm-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{component.name.upper()}}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">SWITCH</h6>
+          
+                  <p class="card-text">
+                    Is open: {{component.is_open}} <br />
+                    Is Close: {{component.is_close}}<br />
+                    Status: {{component.status}}<br />
+                  </p>
+                </div>
+              </div>
+            </div>
+            {% endif %} {% endfor %}
+    <hr/>
+    {% endfor %}
+  
+  <!-- <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">MIED1</h5>
+        <h6 class="card-subtitle mb-2 text-muted">IED</h6>
+        <p class="card-text">
+          Current: {{load1}} <br />
+          Voltage: 1.2<br />
+          Power: 123.32<br />
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Q1-3</h5>
+        <h6 class="card-subtitle mb-2 text-muted">SWITCH</h6>
+
+        <p class="card-text">
+          Is open: 0 <br />
+          Is Close: 1<br />
+          Status: [01]<br />
+        </p>
+      </div>
+    </div>
+  </div> -->
+</div>

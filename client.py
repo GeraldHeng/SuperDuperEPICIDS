@@ -1,3 +1,5 @@
+# https://diyprojects.io/flask-bootstrap-html-interface-effortless-python-projects/#.YNnlLhMza3I
+# https://blog.miguelgrinberg.com/post/dynamically-update-your-flask-web-pages-using-turbo-flask
 from opcua import Client
 from colorama import init, Fore, Back, Style
 import helpers.client_helper_funcs as helper
@@ -7,6 +9,14 @@ from switch import Switch
 from ied import IED
 from case import Case
 import constant
+from flask import Flask, render_template
+import random
+import re
+import sys
+from turbo_flask import Turbo
+import threading
+app = Flask(__name__)
+turbo = Turbo(app)
 
 
 class ServerClient:
@@ -82,12 +92,6 @@ class ServerClient:
 
         if np.less(abs(tied_sum - sied_sum), constant.CURRENT_MARGIN).all():
             # print(Fore.GREEN + 'Case Smart Home is consistent')
-            # print()
-            # print(Fore.RED + 'Case Smart Home is NOT consistent')
-            # print('tied_sum Value ' + str(tied_sum))
-            # print('sied_sum Value ' + str(sied_sum))
-            # print('abs', abs(tied_sum - sied_sum))
-            # print()
             return True
         else:
             print(Fore.RED + 'Case Smart Home is NOT consistent')
@@ -111,12 +115,12 @@ class ServerClient:
             tied_sum += self.variables['tied4'].current
 
         # 25A(Q2)
-        if self.variables['q2'].is_switch_close():
-            mied_sum += 25
+        # if self.variables['q2'].is_switch_close():
+        #     mied_sum += 25
 
-        # 63A(Q2A)
-        if self.variables['q2a'].is_switch_close():
-            mied_sum += 63
+        # # 63A(Q2A)
+        # if self.variables['q2a'].is_switch_close():
+        #     mied_sum += 63
 
         # MIED1
         if self.variables['q2b'].is_switch_close():
@@ -326,15 +330,27 @@ class ServerClient:
                         connected_to = None
 
                     Switch.define_switch((component + '.' + item.replace('-', '_')), helper.dict, item.lower(),
-                                         self.variables, self.server, connected_to)
+                                         self.variables, self.server, connected_to, component)
                 elif item_val['type'] is 'ied':
                     IED.define_ied((component + '.' + item.replace('-', '_')), helper.dict, item.lower(),
-                                   self.variables, self.server)
+                                   self.variables, self.server, component)
 
         self.variables['timestamp'] = helper.get_node_value(
             'timestamp', self.server, helper.dict)
 
         return self.variables
+
+    def sort_by_origin(self):
+        origins = {}
+        for k, variable in self.variables.items():
+            print(variable)
+            if not isinstance(variable, str):
+                if variable.origin in origins:
+                    origins[variable.origin].append(variable)
+                else:
+                    origins[variable.origin] = [variable]
+
+        return origins
 
 
 def main():
@@ -357,7 +373,7 @@ def main():
         #                        ])
         # case_smart_home.get_result()
         serverClient.check_case_smart_home()
-        case_smart_home.get_result()
+
         serverClient.check_case_micro_grid()
 
         serverClient.check_case_generation()
@@ -367,5 +383,31 @@ def main():
         time.sleep(1)
 
 
+@app.route("/")
+def home():
+    print('hi')
+    return render_template('index.html')
+
+
+@app.before_first_request
+def before_first_request():
+    threading.Thread(target=update_load).start()
+
+
+def update_load():
+    with app.app_context():
+        serverClient = ServerClient('opc.tcp://0.0.0.0:4840')
+        serverClient.connect()
+        while True:
+            serverClient.update_client_object()
+            # print(serverClient.sort_by_origin())
+            turbo.push(turbo.replace(render_template(
+                'components.html', origins=serverClient.sort_by_origin()), 'load-components'))
+            turbo.push(turbo.replace(render_template(
+                'timestamp.html', timestamp=serverClient.get_timestamp()), 'load-timestamp'))
+            time.sleep(0.5)
+
+
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
+    # main()
