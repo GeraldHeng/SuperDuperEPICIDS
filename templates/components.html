@@ -6,9 +6,25 @@
             <div class="col-sm-3">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">{{component.name.upper()}}</h5>
+                    <div class="row">
+                        <div class="col">                  
+                            <h5 class="card-title">{{component.name.upper()}}</h5>
+                        </div>
+                        <div class="col">  
+                            {% if component.consistent_status %}                
+                        <span class="float-end badge bg-success">Consistent</span>
+                        {% else %}
+                        <div class="float-end rounded d-inline-flex" style="background-color: red; color: white; padding: 0px 3px 0px 3px;">
+                            <p style="font-size: small;"><strong>{{component.consistency_message}}</strong></p>                
+                        </div>   
+                        {% endif %}
+                        </div>
+                    </div>
+                  
                   <h6 class="card-subtitle mb-2 text-muted">IED</h6>
+                  <hr/>
                   <p class="card-text">
+                   
                     Current: {{component.current}} <br />
                     Voltage: {{component.voltage}}<br />
                     Power Real: {{component.power_real}}<br />
@@ -19,15 +35,30 @@
               </div>
             </div>
             {% elif component.type == 'switch' %}
-            <div class="col-sm-3">
+             <div class="col-sm-3">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">{{component.name.upper()}}</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">SWITCH</h6>
-          
+                    <div class="row">
+                        <div class="col">                  
+                            <h5 class="card-title">{{component.name.upper()}}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">SWITCH</h6>
+
+                        </div>
+                        <div class="col">   
+                            {% if component.consistent_status == True %}                
+                            <span class="float-end badge bg-success">Consistent</span>
+                            {% else %}
+                            <div class="float-end rounded d-inline-flex" style="background-color: red; color: white; padding: 0px 3px 0px 3px;">
+                                <p style="font-size: small;"><strong>{{component.consistency_message}}</strong></p>                
+                            </div>   
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr/>
                   <p class="card-text">
-                    Is open: {{component.is_open}} <br />
-                    Is Close: {{component.is_close}}<br />
+                      <!-- Corresponding switch is OPEN(OFF)! -->
+                      Is open: {{ 'True' if component.is_open == 0 else 'False' }}<br/>
+                      Is close: {{ 'True' if component.is_close == 0 else 'False' }}<br/>            
                     Status: {{component.status}}<br />
                   </p>
                 </div>

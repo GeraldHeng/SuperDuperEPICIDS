@@ -24,6 +24,8 @@ class IED:
         self.power_reactive = power_reactive
         self.power_real = power_real
         self.origin = origin
+        self.consistent_status = True
+        self.consistency_message = 'Consistent'
 
     def introduce(self):
         '''
@@ -89,8 +91,12 @@ class IED:
 
         if is_consistent:
             # print()
+            self.consistent_status = True
+            self.consistency_message = 'Consistent'
             return True
         else:
+            self.consistency_message = 'IED Status is not consistent, should be 0'
+            self.consistent_status = False
             print(Fore.RED + 'The current values are: ')
             self.introduce()
             print()

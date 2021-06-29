@@ -18,6 +18,8 @@ class Switch:
         self.status = status
         self.connected_to = connected_to
         self.origin = origin
+        self.consistent_status = True
+        self.consistency_message = 'Consistent'
 
     def introduce(self):
         '''
@@ -40,12 +42,16 @@ class Switch:
              self.status == '[10]') or \
             (self.is_close == 0 and self.is_open == 1 and
              self.status == '[01]'):
+            self.consistent_status = True
+            self.consistency_message = 'Consistent'
             return True
         else:
             print(Fore.RED + self.name + ' switch status is NOT consistent')
             print(Fore.RED + 'The current values are: ')
             self.introduce()
             print()
+            self.consistent_status = False
+            self.consistency_message = 'Switch Status is not consistent'
             return False
 
     def is_switch_close(self):

@@ -66,6 +66,7 @@ class ServerClient:
                     self.variables[val.connected_to.lower()
                                    ].check_off_consistency()
 
+    # OK
     def check_case_smart_home(self):
         '''
         The summation of TIED2 and TIED4 should be equal to the summation of SIED1 to 4
@@ -94,6 +95,23 @@ class ServerClient:
             # print(Fore.GREEN + 'Case Smart Home is consistent')
             return True
         else:
+            if self.variables['q3'].is_switch_close():
+                self.variables['tied2'].consistent_status = False
+                self.variables['tied2'].consistency_message = 'Inconsistent with Case Smart Home'
+
+            if self.variables['q2-1'].is_switch_close():
+                self.variables['tied4'].consistent_status = False
+                self.variables['tied4'].consistency_message = 'Inconsistent with Case Smart Home'
+            
+            i = 3
+            for x in range(1, 5):
+                if self.variables['q3-' + str(x + i)].is_switch_close():
+                    self.variables['sied' + str(x)].consistent_status = False
+                    self.variables['sied' +
+                                   str(x)].consistency_message = 'Inconsistent with Case Smart Home'
+                i = i - 2
+
+
             print(Fore.RED + 'Case Smart Home is NOT consistent')
             print('tied_sum Value ' + str(tied_sum))
             print('sied_sum Value ' + str(sied_sum))
@@ -101,6 +119,7 @@ class ServerClient:
             print()
             return False
 
+    # HALF OK, need to add MAMI3
     def check_case_micro_grid(self):
         '''
         The summation of TIED4 should be equal to the summation of MIED1, MIED2,
@@ -135,6 +154,18 @@ class ServerClient:
             # print()
             return True
         else:
+            if self.variables['q2-1'].is_switch_close():
+                self.variables['tied4'].consistent_status = False
+                self.variables['tied4'].consistency_message = 'Inconsistent with Case Micro Grid'
+
+            if self.variables['q2b'].is_switch_close():
+                self.variables['mied1'].consistent_status = False
+                self.variables['mied1'].consistency_message = 'Inconsistent with Case Micro Grid'
+
+            if self.variables['q2c'].is_switch_close():
+                self.variables['mied2'].consistent_status = False
+                self.variables['mied2'].consistency_message = 'Inconsistent with Case Micro Grid'
+
             print(Fore.RED + 'Case Micro Grid is NOT consistent')
             print('tied_sum Value ' + str(tied_sum))
             print('mied_sum Value ' + str(mied_sum))
@@ -142,6 +173,7 @@ class ServerClient:
             print()
             return False
 
+    # NOT OK
     def check_case_generation(self):
         '''
         The summation of GIED2, GIED1 divided by amount of pathways (1 to 4)
@@ -208,6 +240,7 @@ class ServerClient:
             print()
             return True
 
+    # NOT OK
     def check_case_extended_generation(self, generation_sum, outlet_switch_close_count):
         '''
         Case Extended Generation: Need value outlet_switch_close_count and gied_sum from Case Generation.
@@ -261,6 +294,7 @@ class ServerClient:
             print()
             return True
 
+    # OK
     def check_case_tied1_tied2(self):
         '''
         TIED1 should be equal to TIED2 If both switches, Q1-3 and Q3 are ON(CLOSE).
@@ -274,6 +308,11 @@ class ServerClient:
                 # print()
                 return True
             else:
+                self.variables['tied1'].consistent_status = False
+                self.variables['tied2'].consistency_message = 'Inconsistent with Case TIED1 TIED2'
+
+                self.variables['tied1'].consistent_status = False
+                self.variables['tied2'].consistency_message = 'Inconsistent with Case TIED1 TIED2'
                 print(Fore.RED + 'Case TIED1 TIED2 is NOT consistent')
                 print()
                 return False
@@ -283,6 +322,7 @@ class ServerClient:
             print()
             return False
 
+    # NOT NEEDED
     def check_case_sied1_gied2(self):
         '''
         SIED1 should be equal to GIED2 If both switches, Q3-4, Q1A are ON(CLOSE).
@@ -343,7 +383,6 @@ class ServerClient:
     def sort_by_origin(self):
         origins = {}
         for k, variable in self.variables.items():
-            print(variable)
             if not isinstance(variable, str):
                 if variable.origin in origins:
                     origins[variable.origin].append(variable)
@@ -385,7 +424,6 @@ def main():
 
 @app.route("/")
 def home():
-    print('hi')
     return render_template('index.html')
 
 
@@ -400,6 +438,11 @@ def update_load():
         serverClient.connect()
         while True:
             serverClient.update_client_object()
+            serverClient.check_all_variable_consistency()
+            serverClient.check_case_smart_home()
+            serverClient.check_case_micro_grid()
+            serverClient.check_case_tied1_tied2()
+
             # print(serverClient.sort_by_origin())
             turbo.push(turbo.replace(render_template(
                 'components.html', origins=serverClient.sort_by_origin()), 'load-components'))
