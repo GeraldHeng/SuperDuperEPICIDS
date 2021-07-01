@@ -1,0 +1,6 @@
+<div class="row gy-5" id="load-logs">
+  <div class="overflow-auto" style="height: 200px">
+    {% autoescape false %} {% for log in logs %} {{log}} <br />
+    {% endfor %} {% endautoescape %}
+  </div>
+</div>

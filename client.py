@@ -9,7 +9,7 @@ from switch import Switch
 from ied import IED
 from case import Case
 import constant
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 import random
 import re
 import sys
@@ -17,6 +17,7 @@ from turbo_flask import Turbo
 import threading
 app = Flask(__name__)
 turbo = Turbo(app)
+logs = []
 
 
 class ServerClient:
@@ -102,7 +103,7 @@ class ServerClient:
             if self.variables['q2-1'].is_switch_close():
                 self.variables['tied4'].consistent_status = False
                 self.variables['tied4'].consistency_message = 'Inconsistent with Case Smart Home'
-            
+
             i = 3
             for x in range(1, 5):
                 if self.variables['q3-' + str(x + i)].is_switch_close():
@@ -110,7 +111,6 @@ class ServerClient:
                     self.variables['sied' +
                                    str(x)].consistency_message = 'Inconsistent with Case Smart Home'
                 i = i - 2
-
 
             print(Fore.RED + 'Case Smart Home is NOT consistent')
             print('tied_sum Value ' + str(tied_sum))
@@ -427,6 +427,17 @@ def home():
     return render_template('index.html')
 
 
+@app.route("/download-logs")
+def download_logs():
+    with open('data/logs.txt', 'w') as out_file:
+        for log in logs:
+            new_log = log.replace('<br/>', '\n')
+            new_log += '\n'
+            out_file.write(new_log)
+
+    return send_file('data/logs.txt', as_attachment=True, attachment_filename="logs.txt")
+
+
 @app.before_first_request
 def before_first_request():
     threading.Thread(target=update_load).start()
@@ -443,11 +454,18 @@ def update_load():
             serverClient.check_case_micro_grid()
             serverClient.check_case_tied1_tied2()
 
-            # print(serverClient.sort_by_origin())
+            log = serverClient.get_timestamp()
+            for item in serverClient.variables.values():
+                if (type(item) is Switch or type(item) is IED) and item.consistent_status == False:
+                    log += ' <br/> ' + item.name + ' ' + item.consistency_message
+            logs.insert(0, log + ' <br/> ')
+
             turbo.push(turbo.replace(render_template(
                 'components.html', origins=serverClient.sort_by_origin()), 'load-components'))
             turbo.push(turbo.replace(render_template(
                 'timestamp.html', timestamp=serverClient.get_timestamp()), 'load-timestamp'))
+            turbo.push(turbo.replace(render_template(
+                'logs.html', logs=logs), 'load-logs'))
             time.sleep(0.5)
 
 
