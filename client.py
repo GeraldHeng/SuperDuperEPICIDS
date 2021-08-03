@@ -15,6 +15,7 @@ import re
 import sys
 from turbo_flask import Turbo
 import threading
+
 app = Flask(__name__)
 turbo = Turbo(app)
 logs = []
@@ -445,20 +446,25 @@ def before_first_request():
 
 def update_load():
     with app.app_context():
+        print('hiiii1')
         serverClient = ServerClient('opc.tcp://0.0.0.0:4840')
         serverClient.connect()
+        print('hi2')
         while True:
+            print('hi3')
             serverClient.update_client_object()
             serverClient.check_all_variable_consistency()
             serverClient.check_case_smart_home()
             serverClient.check_case_micro_grid()
             serverClient.check_case_tied1_tied2()
-
+            print('hi4')
             log = serverClient.get_timestamp()
             for item in serverClient.variables.values():
                 if (type(item) is Switch or type(item) is IED) and item.consistent_status == False:
                     log += ' <br/> ' + item.name + ' ' + item.consistency_message
             logs.insert(0, log + ' <br/> ')
+
+            print('hihihi5')
 
             turbo.push(turbo.replace(render_template(
                 'components.html', origins=serverClient.sort_by_origin()), 'load-components'))
