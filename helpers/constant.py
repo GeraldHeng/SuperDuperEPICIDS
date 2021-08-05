@@ -12,22 +12,54 @@ IED = 'ied'
 
 # Data path for different scenario.
 DATA = '../data/'
-SCENARIO_1_NAME = 'scenario 1'
-SCENARIO_1_PATH = DATA + 'Scenario_1/EpicLog_Scenario 1_19_Oct_2018_14_44.csv'
-SCENARIO_2_PATH = DATA + 'Scenario_2/EpicLog_Scenario 2_19_Oct_2018_14_56.csv'
-SCENARIO_2_NAME = 'scenario 2'
-SCENARIO_3_PATH = DATA + 'Scenario_3/EpicLog_Scenario 3_19_Oct_2018_15_02.csv'
-SCENARIO_3_NAME = 'scenario 3'
-SCENARIO_4_PATH = DATA + 'Scenario_4/EpicLog_Scenario 4_19_Oct_2018_15_23.csv'
-SCENARIO_4_NAME = 'scenario 4'
-SCENARIO_5_PATH = DATA + 'Scenario_5/EpicLog_Scenario 5_19_Oct_2018_15_45.csv'
-SCENARIO_5_NAME = 'scenario 5'
-SCENARIO_6_PATH = DATA + 'Scenario_6/EpicLog_Scenario 6_19_Oct_2018_16_06.csv'
-SCENARIO_6_NAME = 'scenario 6'
-SCENARIO_7_PATH = DATA + 'Scenario_7/EpicLog_Scenario 7_07_Nov_2018_14_40.csv'
-SCENARIO_7_NAME = 'scenario 7'
-SCENARIO_8_PATH = DATA + 'Scenario_8/EpicLog_Scenario 8_07_Nov_2018_14_57.csv'
-SCENARIO_8_NAME = 'scenario 8'
+DATA_LIST = {'Real EPIC': [
+    {'name': 'scenario 1', 'path': DATA +
+        'Scenario_1/EpicLog_Scenario 1_19_Oct_2018_14_44.csv',
+        'type': 're_csv'},
+    {'name': 'scenario 2', 'path': DATA +
+        'Scenario_2/EpicLog_Scenario 2_19_Oct_2018_14_56.csv',
+        'type': 're_csv'},
+    {'name': 'scenario 3', 'path': DATA +
+        'Scenario_3/EpicLog_Scenario 3_19_Oct_2018_15_02.csv',
+        'type': 're_csv'},
+    {'name': 'scenario 4', 'path': DATA +
+        'Scenario_4/EpicLog_Scenario 4_19_Oct_2018_15_23.csv',
+        'type': 're_csv'},
+    {'name': 'scenario 5', 'path': DATA +
+        'Scenario_5/EpicLog_Scenario 5_19_Oct_2018_15_45.csv',
+        'type': 're_csv'},
+    {'name': 'scenario 6', 'path': DATA +
+        'Scenario_6/EpicLog_Scenario 6_19_Oct_2018_16_06.csv',
+        'type': 're_csv'},
+    {'name': 'scenario 7', 'path': DATA +
+        'Scenario_7/EpicLog_Scenario 7_07_Nov_2018_14_40.csv',
+        'type': 're_csv'},
+    {'name': 'scenario 8', 'path': DATA +
+        'Scenario_8/EpicLog_Scenario 8_07_Nov_2018_14_57.csv',
+        'type': 're_csv'},
+],
+    #     'Digital Twin': [
+    #     {'name': 'MQTT txt file', 'path': DATA +
+    #      'mqttlog.txt',
+    #      'type': 'dt_mqtt_txt'}
+    # ]
+}
+# SCENARIO_1_NAME = 'scenario 1'
+# SCENARIO_1_PATH = DATA + 'Scenario_1/EpicLog_Scenario 1_19_Oct_2018_14_44.csv'
+# SCENARIO_2_PATH = DATA + 'Scenario_2/EpicLog_Scenario 2_19_Oct_2018_14_56.csv'
+# SCENARIO_2_NAME = 'scenario 2'
+# SCENARIO_3_PATH = DATA + 'Scenario_3/EpicLog_Scenario 3_19_Oct_2018_15_02.csv'
+# SCENARIO_3_NAME = 'scenario 3'
+# SCENARIO_4_PATH = DATA + 'Scenario_4/EpicLog_Scenario 4_19_Oct_2018_15_23.csv'
+# SCENARIO_4_NAME = 'scenario 4'
+# SCENARIO_5_PATH = DATA + 'Scenario_5/EpicLog_Scenario 5_19_Oct_2018_15_45.csv'
+# SCENARIO_5_NAME = 'scenario 5'
+# SCENARIO_6_PATH = DATA + 'Scenario_6/EpicLog_Scenario 6_19_Oct_2018_16_06.csv'
+# SCENARIO_6_NAME = 'scenario 6'
+# SCENARIO_7_PATH = DATA + 'Scenario_7/EpicLog_Scenario 7_07_Nov_2018_14_40.csv'
+# SCENARIO_7_NAME = 'scenario 7'
+# SCENARIO_8_PATH = DATA + 'Scenario_8/EpicLog_Scenario 8_07_Nov_2018_14_57.csv'
+# SCENARIO_8_NAME = 'scenario 8'
 
 # ------------------------- IED -------------------------------------
 # IED VALUES

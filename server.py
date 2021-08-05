@@ -8,7 +8,7 @@ import datetime
 import time
 import sys
 import helpers.server_helper_funcs as madlad
-import constant
+from helpers.constant import *
 import csv
 
 # Server Setup
@@ -21,7 +21,7 @@ EPIC = server.register_namespace(name)  # ns = 2
 
 # Folder Objects
 common = server.nodes.objects.add_folder(EPIC, "common")
-components = constant.VALUES
+components = VALUES
 for component in components.keys():
     print(component)
     node = server.nodes.objects.add_folder(EPIC, component)
@@ -35,18 +35,18 @@ ts = madlad.create_timestamp(
 variable_dict['timestamp'] = ts
 
 # All components inside SLD.
-for component, component_val in constant.VALUES.items():
+for component, component_val in VALUES.items():
     print('Setting up ' + component + '...')
     for item, item_val in component_val.items():
         if item != 'node_val':
-            if item_val['type'] is constant.SWITCH or item_val['type'] is constant.IED:
+            if item_val['type'] is SWITCH or item_val['type'] is IED:
                 item_created = None
                 item = item.replace('-', '_')
 
-                if item_val['type'] is constant.SWITCH:
+                if item_val['type'] is SWITCH:
                     item_created = madlad.create_switch(
                         EPIC, component_val['node_val'], (component + '.' + item))
-                elif item_val['type'] is constant.IED:
+                elif item_val['type'] is IED:
                     item_created = madlad.create_meter(
                         EPIC, component_val['node_val'], (component + '.' + item))
 
@@ -76,41 +76,49 @@ try:
     print('Server Online')
 
     while 1:
-        chosen_scenario_path = ''
-        chosen_scenario = int(input('Please select a scenario 1 - 8: '))
+        # chosen_scenario = int(input('Please select a scenario 1 - 8: '))
+        select_num = 1
+        data_list_items = DATA_LIST.items()
+        for origin, data_list in data_list_items:
+            print(origin + ":")
+            for data in data_list:
+                print(data['name'], 'Please select -', select_num)
+                data['number'] = select_num
+                select_num += 1
+            print()
 
-        if chosen_scenario == 1:
-            chosen_scenario_path = constant.SCENARIO_1_PATH
-        elif chosen_scenario == 2:
-            chosen_scenario_path = constant.SCENARIO_2_PATH
-        elif chosen_scenario == 3:
-            chosen_scenario_path = constant.SCENARIO_3_PATH
-        elif chosen_scenario == 4:
-            chosen_scenario_path = constant.SCENARIO_4_PATH
-        elif chosen_scenario == 5:
-            chosen_scenario_path = constant.SCENARIO_5_PATH
-        elif chosen_scenario == 6:
-            chosen_scenario_path = constant.SCENARIO_6_PATH
-        elif chosen_scenario == 7:
-            chosen_scenario_path = constant.SCENARIO_7_PATH
-        elif chosen_scenario == 8:
-            chosen_scenario_path = constant.SCENARIO_8_PATH
-        else:
+        chosen_data_number = int(input(('Please select data to read from - ')))
+
+        chosen_data = None
+        for origin, data_list in data_list_items:
+            if not chosen_data:
+                for data in data_list:
+                    if data['number'] == chosen_data_number:
+                        chosen_data = data
+                        break
+
+        if not chosen_data:
             print('Please select a valid path')
             continue
 
         # Open respective scenario file and run.
-        with open(chosen_scenario_path, mode='r') as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-            for line in csv_reader:
-                print(line['Timestamp'])
-                for key, value in variable_dict.items():
-                    if key != 'timestamp':
-                        madlad.setting_values(value, line)
-                    else:
-                        value.get_variables()[0].set_value(line['Timestamp'])
+        print('--------------- Starting', data['name'], '---------------')
+        if data['type'] == 're_csv':
+            with open(data['path'], mode='r') as csv_file:
+                csv_reader = csv.DictReader(csv_file)
+                for line in csv_reader:
+                    print(line['Timestamp'])
+                    for key, value in variable_dict.items():
+                        if key != 'timestamp':
+                            madlad.setting_values(value, line)
+                        else:
+                            value.get_variables()[0].set_value(
+                                line['Timestamp'])
 
-                time.sleep(1)
+                    time.sleep(1)
+        elif data['type'] == 'dt_mqtt_txt':
+            print('mqtt text file goes here')
+
 finally:
     server.stop()
     print('Server Offline')

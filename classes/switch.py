@@ -3,7 +3,12 @@ import helpers.client_helper_funcs as helper
 
 
 class Switch:
-    def __init__(self, name, is_close, is_open, status, connected_to, origin):
+    def __init__(self, name=None,
+                 is_close=None,
+                 is_open=None,
+                 status=None,
+                 connected_to=None,
+                 origin=None, platform='real_epic'):
         '''
         @Params
         String name - name of the switch.
@@ -20,6 +25,7 @@ class Switch:
         self.origin = origin
         self.consistent_status = True
         self.consistency_message = 'Consistent'
+        self.platform = platform
 
     def introduce(self):
         '''
@@ -82,3 +88,20 @@ class Switch:
 
         var_dict[var_name] = Switch(
             var_name, is_close, is_open, status, connected_to, origin)
+
+    @ staticmethod
+    def define_switch_dt(var_name, status, var_dict):
+        '''
+        Define switch with values.
+        String var_name - variable name to define for var_dict.
+        Dict var_dict - store switch/ied object.
+        Int status - Status of the switch 1 is close 0 is open.
+        '''
+
+        # 1 is close, 0 is open.
+        status = status
+        is_open = 1 if status == 0 else 0
+        is_close = status
+
+        var_dict[var_name] = Switch(
+            name=var_name, is_close=is_close, is_open=is_open, status=status, platform='dt')

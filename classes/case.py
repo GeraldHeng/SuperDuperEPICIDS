@@ -1,5 +1,5 @@
 import numpy as np
-import constant
+from helpers.constant import * 
 from colorama import init, Fore, Back, Style
 
 # Generate different kind of case, summation case...
@@ -32,7 +32,7 @@ class Case:
             for summation in summations:
                 for summation2 in summations:
                     if np.less(abs(summation - summation2),
-                               constant.CURRENT_MARGIN).all():
+                               CURRENT_MARGIN).all():
                         is_success
                     else:
                         is_success = False

@@ -1,7 +1,7 @@
 import sys
 import opcua
 from random import randint
-import constant
+from helpers.constant import * 
 
 
 def setting_values(node: object, values: dict,):
@@ -14,7 +14,7 @@ def setting_values(node: object, values: dict,):
             for var in node.get_variables():
                 is_correct_value = False
 
-                for val in constant.IED_VALUES:
+                for val in IED_VALUES:
                     if val in var.get_browse_name().to_string():
                         is_correct_value = True
 
@@ -79,7 +79,7 @@ def setting_values(node: object, values: dict,):
             for var in node.get_variables():
                 is_correct_value = False
 
-                for val in constant.SWITCH_VALUES:
+                for val in SWITCH_VALUES:
                     if val in var.get_browse_name().to_string():
                         is_correct_value = True
 
@@ -115,7 +115,7 @@ def create_meter(namespace: str, sector: str, bname: str):
     '''
     try:
         meter = sector.add_object(namespace, bname)
-        for val in constant.IED_VALUES:
+        for val in IED_VALUES:
             meter.add_variable(
                 namespace, '{}.{}'.format(bname, val), 0.0)
         make_writable(meter)
@@ -130,7 +130,7 @@ def create_switch(namespace: str, sector: object, bname: str):
     '''
     try:
         switch = sector.add_object(namespace, bname)
-        for val in constant.SWITCH_VALUES:
+        for val in SWITCH_VALUES:
             switch.add_variable(
                 namespace, '{}.{}'.format(bname, val), 0.0)
         return switch

@@ -1,156 +1,40 @@
-10/19/2018 15:45:34 
+10/19/2018 15:47:44 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  
-10/19/2018 15:45:34 
+10/19/2018 15:47:43 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  
-10/19/2018 15:45:33 
+10/19/2018 15:47:42 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  
-10/19/2018 15:45:32 
+10/19/2018 15:47:41 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  
-10/19/2018 15:45:31 
+10/19/2018 15:47:41 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  
-10/19/2018 15:45:31 
+10/19/2018 15:47:40 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  
-10/19/2018 15:45:30 
+10/19/2018 15:47:39 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  
-10/19/2018 15:45:29 
+10/19/2018 15:47:38 
  mied1 Inconsistent with Case Micro Grid 
  mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:28 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:28 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:27 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:26 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:25 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:25 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:24 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:23 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:23 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:22 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:21 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:21 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
- tied4 Inconsistent with Case Micro Grid 
- 
-10/19/2018 15:45:20 
- mied1 Inconsistent with Case Micro Grid 
- mied2 Inconsistent with Case Micro Grid 
- sied2 Inconsistent with Case Smart Home 
- gied1 IED Status is not consistent, should be 0 
- q1 Switch Status is not consistent 
  tied4 Inconsistent with Case Micro Grid 
  

@@ -1,12 +1,12 @@
 from colorama import init, Fore, Back, Style
 import helpers.client_helper_funcs as helper
 import numpy as np
-import constant
+from helpers.constant import *
 
 
-class IED:
-    def __init__(self, name, current, voltage, power_apparent, power_reactive,
-                 power_real, origin):
+class Ied:
+    def __init__(self, name=None, current=None, voltage=None, power_apparent=None, power_reactive=None,
+                 power_real=None, origin=None, platform='real_epic'):
         '''
         @Params
         String name - name of the ied.
@@ -26,6 +26,7 @@ class IED:
         self.origin = origin
         self.consistent_status = True
         self.consistency_message = 'Consistent'
+        self.platform = platform
 
     def introduce(self):
         '''
@@ -47,7 +48,7 @@ class IED:
         is_consistent = True
 
         # Current
-        if np.less(self.current, constant.CURRENT_MARGIN).all():
+        if np.less(self.current, CURRENT_MARGIN).all():
             # print(Fore.GREEN + 'current is consistent')
             v = 0
         else:
@@ -55,18 +56,18 @@ class IED:
             is_consistent = False
 
         # Voltage
-        # if np.less(self.voltage, constant.VOLTAGE_MARGIN).all():
+        # if np.less(self.voltage, VOLTAGE_MARGIN).all():
         #     # print(Fore.GREEN + 'voltage is consistent')
         #     v = 0
         # else:
         #     print(Fore.RED + 'voltage is NOT consistent')
         #     is_consistent = False
         # print('current voltage:', abs(self.voltage))
-        # print('margin voltage:', constant.VOLTAGE_MARGIN)
+        # print('margin voltage:', VOLTAGE_MARGIN)
         # print()
 
         # Power Apparent
-        if np.less(self.power_apparent, constant.POWER_MARGIN).all():
+        if np.less(self.power_apparent, POWER_MARGIN).all():
             # print(Fore.GREEN + 'power apparent is consistent')
             v = 0
         else:
@@ -74,7 +75,7 @@ class IED:
             is_consistent = False
 
         # Power Reactive
-        if np.less(self.power_reactive, constant.POWER_MARGIN).all():
+        if np.less(self.power_reactive, POWER_MARGIN).all():
             # print(Fore.GREEN + 'power reactive is consistent')
             v = 0
         else:
@@ -82,7 +83,7 @@ class IED:
             is_consistent = False
 
         # Power Real
-        if np.less(self.power_real, constant.POWER_MARGIN).all():
+        if np.less(self.power_real, POWER_MARGIN).all():
             # print(Fore.GREEN + 'power real is consistent')
             v = 0
         else:
@@ -149,6 +150,27 @@ class IED:
         power_real = np.array(
             [helper.get_node_value(node_name + '.Measurement.Real', server, node_dict)])
 
-        var_dict[var_name] = IED(var_name, current, voltage,
+        var_dict[var_name] = Ied(var_name, current, voltage,
                                  power_apparent, power_reactive,
                                  power_real, origin)
+
+    @staticmethod
+    def define_ied_dt(var_name, values, var_dict):
+        '''
+        Define ied with values.
+        @Param 
+        Dict values - where is values of ied is temp store at.
+        String var_name - variable name to define for var_dict.
+        Dict var_dict - store switch/ied object.
+        '''
+        print(var_name)
+        # I (current)
+        current = np.array(
+            [values['Ia'], values['Ib'], values['Ic']])
+
+        # V (voltage)
+        voltage = np.array(
+            [values['Vca'], values['Vbc'], values['Vab']])
+
+        var_dict[var_name] = Ied(
+            name=var_name, current=current, voltage=voltage, platform='dt')

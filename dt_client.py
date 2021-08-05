@@ -16,6 +16,8 @@ from classes.switch import Switch
 from classes.ied import Ied
 from classes.case import Case
 from helpers.constant import *
+import json
+import paho.mqtt.client as mqttClient
 
 app = Flask(__name__)
 turbo = Turbo(app)
@@ -23,51 +25,22 @@ logs = []
 
 
 class ServerClient:
-    def __init__(self, server_ip):
-        self.server_ip = server_ip
-        self.server = None
+    def __init__(self, server_ip, port, topic, on_connect, on_message):
         self.variables = {}
+        self.server = mqttClient.Client('client')
+        self.broker_address = server_ip
+        self.port = port
+        self.topic = topic
+
+        self.server.on_connect = on_connect
+        self.server.on_message = on_message
 
     def connect(self):
-        '''
-        Connects to server $server_ip.
-        '''
-        try:
-            server = Client(self.server_ip)
-            server.connect()
-            print(Fore.CYAN + 'Connected to ' + self.server_ip)
-            print('Server Connected')
-            self.server = server
-        except:
-            print(Fore.RED + 'Connection to ' + self.server_ip + 'failed')
-
-    def disconnect(self):
-        '''
-        Disconnects from server.
-        '''
-        try:
-            self.server.close_session()
-            print(Fore.CYAN + 'Succesfully disconnected from ' + self.server_ip)
-        except:
-            print(Fore.RED + 'Failed to disconnect from ' + self.server_ip)
-
-    def get_timestamp(self):
-        '''
-        Get timestamp of data.
-        '''
-        return str(self.variables['timestamp'])
-
-    def check_all_variable_consistency(self):
-        '''
-        Check consistency of all variable against themselves.
-        For IED will check if corresponding switch is OFF(OPEN).
-        '''
-        for key, val in self.variables.items():
-            if type(val) is Switch:
-                val.check_consistency()
-                if not val.is_switch_close() and val.connected_to is not None:
-                    self.variables[val.connected_to.lower()
-                                   ].check_off_consistency()
+        print('connecting')
+        self.server.connect(self.broker_address, port=self.port)
+        self.server.loop_start()
+        time.sleep(2)
+        self.server.subscribe(self.topic)
 
     # OK
     def check_case_smart_home(self):
@@ -379,7 +352,7 @@ class ServerClient:
 
         self.variables['timestamp'] = helper.get_node_value(
             'timestamp', self.server, helper.dict)
-        
+
         return self.variables
 
     def sort_by_origin(self):
@@ -398,34 +371,182 @@ class ServerClient:
         return origins
 
 
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print('Connected to broker')
+    else:
+        print('Connection failed')
+
+
+def on_message(client, userdata, message):
+    # print(message.payload.decode("utf-8"))
+    global line_counter
+    global temp_variable_dict
+    dt_item = json.loads(message.payload.decode("utf-8"))[0]
+
+    # Get the name of the component.
+    name = dt_item['value'][(dt_item['value'].find(
+        ']') + 1): dt_item['value'].find(':')].strip()
+
+    # To find the component and element split point.
+    c_index = len(name) - 1
+    for c in name[::-1]:
+        if c == '_':
+            break
+        c_index -= 1
+
+    component = name[0: c_index]
+    element = name[c_index + 1: len(name)]
+
+    # Get the value of the component.
+    value = float(dt_item['value'][dt_item['value'].find(
+        ':')+1: len(dt_item['value'])].strip())
+
+    print('component', component)
+    print('element', element)
+    print('value', value)
+
+    line_counter += 1
+    print('line counter', line_counter)
+
+    if component in temp_variable_dict:
+        temp_variable_dict[component][element] = value
+    else:
+        temp_variable_dict[component] = {element: value}
+
+    if line_counter >= 79:
+        line_counter = 0
+        print('finish message interval')
+        print(temp_variable_dict)
+
+        for name, temp_var in temp_variable_dict.items():
+            print(name)
+            print(temp_var)
+            if name[0] is 'Q':
+                # Switch.define_switch_dt(name, val, variable_dict)
+                print(name, 'is a switch')
+            elif 'meter' in name.lower():
+                # Ied.define_ied_dt(
+                #     name, temp_variable_dict[name], variable_dict)
+                print(name, 'is a ied')
+            else:
+                print(name, 'is G1, G2 or motor')
+
+    # if component in temp_variable_dict:
+    #     temp_variable_dict[component][element] = value
+    # else:
+    #     temp_variable_dict[component] = {element: value}
+
+    # if name[0] is 'Q':
+    #     Switch.define_switch_dt(name, val, variable_dict)
+    #     print(name, 'is a switch')
+    # elif 'meter' in name.lower():
+    #     Ied.define_ied_dt(
+    #         name, temp_variable_dict[name], variable_dict)
+    #     print(name, 'is a ied')
+    # else:
+    #     print(name, 'is G1, G2 or motor')
+
+
+# Count to 79 as each subscribe interval will have 79 message.
+line_counter = 0
+temp_variable_dict = {}
+
+
 def main():
-    serverClient = ServerClient('opc.tcp://0.0.0.0:4840')
+    serverClient = ServerClient(
+        '139.59.97.171', 1883, 'measures/#', on_connect, on_message)
     serverClient.connect()
 
-    while 1:
-        serverClient.update_client_object()
+    # Variable to be read in onMessage
 
-        print('\n' + Fore.CYAN + serverClient.get_timestamp() + '\n')
-        serverClient.check_all_variable_consistency()
-        # case_smart_home = Case('Smart Home Check', 'current', 'summation_equal',
-        #                        [[
-        #                            serverClient.variables['tied2'], serverClient.variables['tied4']
-        #                        ],
-        #                            [
-        #                            serverClient.variables['sied1'], serverClient.variables['sied2'],
-        #                            serverClient.variables['sied3'], serverClient.variables['sied4'],
-        #                        ]
-        #                        ])
-        # case_smart_home.get_result()
-        serverClient.check_case_smart_home()
+    try:
+        while True:
+            time.sleep(1)
 
-        serverClient.check_case_micro_grid()
+    except KeyboardInterrupt:
+        serverClient.server.disconnect()
+        serverClient.server.loop_stop()
 
-        serverClient.check_case_generation()
+    # temp_variable_dict = {}
+    # f = open(DATA + 'mqttlog.txt', 'r')
+    # line_counter = 0
+    # for line in f.readlines():
 
-        serverClient.check_case_tied1_tied2()
-        serverClient.check_case_sied1_gied2()
-        time.sleep(1)
+    #     dt_item = json.loads(line)[0]
+
+    #     # Get the name of the component.
+    #     name = dt_item['value'][(dt_item['value'].find(
+    #         ']') + 1): dt_item['value'].find(':')].strip()
+
+    #     # To find the component and element split point.
+    #     c_index = len(name) - 1
+    #     for c in name[::-1]:
+    #         if c == '_':
+    #             break
+    #         c_index -= 1
+
+    #     component = name[0: c_index]
+    #     element = name[c_index + 1: len(name)]
+
+    #     # Get the value of the component.
+    #     value = float(dt_item['value'][dt_item['value'].find(
+    #         ':')+1: len(dt_item['value'])].strip())
+
+    #     if component in temp_variable_dict:
+    #         temp_variable_dict[component][element] = value
+    #     else:
+    #         temp_variable_dict[component] = {element: value}
+
+    #     line_counter += 1
+
+    #     # Each MQTT call give us 79 line of logs, each 79 lines represents a second/round in dt.
+    #     if line_counter >= 79:
+    #         print()
+    #         line_counter = 0
+    #         variable_dict = {}
+    #         for name, val in temp_variable_dict.items():
+    #             if name[0] is 'Q':
+    #                 Switch.define_switch_dt(name, val, variable_dict)
+    #                 print(name, 'is a switch')
+    #             elif 'meter' in name.lower():
+    #                 Ied.define_ied_dt(
+    #                     name, temp_variable_dict[name], variable_dict)
+    #                 print(name, 'is a ied')
+    #             else:
+    #                 print(name, 'is G1, G2 or motor')
+
+    #         print(variable_dict)
+
+    #         time.sleep(1)
+
+    # print(temp_variable_dict)
+    # print('value is ', json.loads(dt_item['value']))
+
+    # while 1:
+    # serverClient.update_client_object()
+
+    # print('\n' + Fore.CYAN + serverClient.get_timestamp() + '\n')
+    # serverClient.check_all_variable_consistency()
+    # case_smart_home = Case('Smart Home Check', 'current', 'summation_equal',
+    #                        [[
+    #                            serverClient.variables['tied2'], serverClient.variables['tied4']
+    #                        ],
+    #                            [
+    #                            serverClient.variables['sied1'], serverClient.variables['sied2'],
+    #                            serverClient.variables['sied3'], serverClient.variables['sied4'],
+    #                        ]
+    #                        ])
+    # case_smart_home.get_result()
+    # serverClient.check_case_smart_home()
+
+    # serverClient.check_case_micro_grid()
+
+    # serverClient.check_case_generation()
+
+    # serverClient.check_case_tied1_tied2()
+    # serverClient.check_case_sied1_gied2()
+    # time.sleep(1)
 
 
 @app.route("/")
@@ -445,37 +566,37 @@ def download_logs():
     return send_file('data/logs.txt', as_attachment=True, attachment_filename="logs.txt")
 
 
-@app.before_first_request
-def before_first_request():
-    threading.Thread(target=update_load).start()
+# @app.before_first_request
+# def before_first_request():
+#     threading.Thread(target=update_load).start()
 
 
-def update_load():
-    with app.app_context():
-        serverClient = ServerClient('opc.tcp://0.0.0.0:4840')
-        serverClient.connect()
-        while True:
-            serverClient.update_client_object()
-            serverClient.check_all_variable_consistency()
-            serverClient.check_case_smart_home()
-            serverClient.check_case_micro_grid()
-            serverClient.check_case_tied1_tied2()
+# def update_load():
+#     with app.app_context():
+#         serverClient = ServerClient('opc.tcp://0.0.0.0:4840')
+#         serverClient.connect()
+#         while True:
+#             serverClient.update_client_object()
+#             serverClient.check_all_variable_consistency()
+#             serverClient.check_case_smart_home()
+#             serverClient.check_case_micro_grid()
+#             serverClient.check_case_tied1_tied2()
 
-            log = serverClient.get_timestamp()
-            for item in serverClient.variables.values():
-                if (type(item) is Switch or type(item) is Ied) and item.consistent_status == False:
-                    log += ' <br/> ' + item.name + ' ' + item.consistency_message
-            logs.insert(0, log + ' <br/> ')
+#             log = serverClient.get_timestamp()
+#             for item in serverClient.variables.values():
+#                 if (type(item) is Switch or type(item) is Ied) and item.consistent_status == False:
+#                     log += ' <br/> ' + item.name + ' ' + item.consistency_message
+#             logs.insert(0, log + ' <br/> ')
 
-            turbo.push(turbo.replace(render_template(
-                'components.html', origins=serverClient.sort_by_origin()), 'load-components'))
-            turbo.push(turbo.replace(render_template(
-                'timestamp.html', timestamp=serverClient.get_timestamp()), 'load-timestamp'))
-            turbo.push(turbo.replace(render_template(
-                'logs.html', logs=logs), 'load-logs'))
-            time.sleep(0.5)
+#             turbo.push(turbo.replace(render_template(
+#                 'components.html', origins=serverClient.sort_by_origin()), 'load-components'))
+#             turbo.push(turbo.replace(render_template(
+#                 'timestamp.html', timestamp=serverClient.get_timestamp()), 'load-timestamp'))
+#             turbo.push(turbo.replace(render_template(
+#                 'logs.html', logs=logs), 'load-logs'))
+#             time.sleep(0.5)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    # main()
+    # app.run(debug=True)
+    main()
