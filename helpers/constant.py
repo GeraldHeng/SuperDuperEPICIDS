@@ -14,28 +14,28 @@ IED = 'ied'
 DATA = '../data/'
 DATA_LIST = {'Real EPIC': [
     {'name': 'scenario 1', 'path': DATA +
-        'Scenario_1/EpicLog_Scenario 1_19_Oct_2018_14_44.csv',
+        'real_epic/Scenario_1/EpicLog_Scenario 1_19_Oct_2018_14_44.csv',
         'type': 're_csv'},
     {'name': 'scenario 2', 'path': DATA +
-        'Scenario_2/EpicLog_Scenario 2_19_Oct_2018_14_56.csv',
+        'real_epic/Scenario_2/EpicLog_Scenario 2_19_Oct_2018_14_56.csv',
         'type': 're_csv'},
     {'name': 'scenario 3', 'path': DATA +
-        'Scenario_3/EpicLog_Scenario 3_19_Oct_2018_15_02.csv',
+        'real_epic/Scenario_3/EpicLog_Scenario 3_19_Oct_2018_15_02.csv',
         'type': 're_csv'},
     {'name': 'scenario 4', 'path': DATA +
-        'Scenario_4/EpicLog_Scenario 4_19_Oct_2018_15_23.csv',
+        'real_epic/Scenario_4/EpicLog_Scenario 4_19_Oct_2018_15_23.csv',
         'type': 're_csv'},
     {'name': 'scenario 5', 'path': DATA +
-        'Scenario_5/EpicLog_Scenario 5_19_Oct_2018_15_45.csv',
+        'real_epic/Scenario_5/EpicLog_Scenario 5_19_Oct_2018_15_45.csv',
         'type': 're_csv'},
     {'name': 'scenario 6', 'path': DATA +
-        'Scenario_6/EpicLog_Scenario 6_19_Oct_2018_16_06.csv',
+        'real_epic/Scenario_6/EpicLog_Scenario 6_19_Oct_2018_16_06.csv',
         'type': 're_csv'},
     {'name': 'scenario 7', 'path': DATA +
-        'Scenario_7/EpicLog_Scenario 7_07_Nov_2018_14_40.csv',
+        'real_epic/Scenario_7/EpicLog_Scenario 7_07_Nov_2018_14_40.csv',
         'type': 're_csv'},
     {'name': 'scenario 8', 'path': DATA +
-        'Scenario_8/EpicLog_Scenario 8_07_Nov_2018_14_57.csv',
+        'real_epic/Scenario_8/EpicLog_Scenario 8_07_Nov_2018_14_57.csv',
         'type': 're_csv'},
 ],
     #     'Digital Twin': [
@@ -146,6 +146,45 @@ VALUES = {
         'Q3': {'type': SWITCH, 'connected_to': 'TIED2'},
         'Q1-3': {'type': SWITCH, 'connected_to': 'TIED1'},
         'Q2-1': {'type': SWITCH, 'connected_to': 'TIED4'},
+    }
+}
+
+DT_VALUES = {
+    'MicroGrid': {
+        # 'MIED1': {'type': IED},
+        # 'MIED2': {'type': IED},
+        'M1Meter': {'type': IED},
+        'M2Meter': {'type': IED},
+        'PVMeter': {'type': IED},
+        'Q2': {'type': SWITCH},
+        'Q2A': {'type': SWITCH},
+        'Q2B': {'type': SWITCH, 'connected_to': 'MIED1'},
+        'Q2C': {'type': SWITCH, 'connected_to': 'MIED2'}
+    },
+    'SmartHome': {
+        'S2Meter': {'type': IED},
+        'S3Meter': {'type': IED},
+        'S4Meter': {'type': IED},
+        'Q4_1': {'type': SWITCH, 'connected_to': 'S4Meter'},
+        'Q4_2': {'type': SWITCH, 'connected_to': 'S3Meter'},
+        'Q4_3': {'type': SWITCH, 'connected_to': 'S2Meter'},
+        'Q4_4': {'type': SWITCH}
+    },
+    'Generation': {
+        'G3Meter': {'type': IED},
+        # 'Q1': {'type': SWITCH, 'connected_to': 'GIED1'},
+        # 'Q1A': {'type': SWITCH, 'connected_to': 'GIED2'},
+        # 'Q1_1': {'type': SWITCH},
+        # 'Q1_2': {'type': SWITCH},
+        # 'Q1-4': {'type': SWITCH},
+        # 'Q1-5': {'type': SWITCH},
+    },
+    'Transmission': {
+        'T1Meter': {'type': IED},
+        'T2Meter': {'type': IED},
+        'Q31': {'type': SWITCH, 'connected_to': 'TIED2'},
+        'Q32_A': {'type': SWITCH, 'connected_to': 'TIED1'},
+        'Q32_B': {'type': SWITCH, 'connected_to': 'TIED4'},
     }
 }
 

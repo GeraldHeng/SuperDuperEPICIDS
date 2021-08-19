@@ -90,7 +90,7 @@ class Switch:
             var_name, is_close, is_open, status, connected_to, origin)
 
     @ staticmethod
-    def define_switch_dt(var_name, status, var_dict):
+    def define_switch_dt(var_name, status, var_dict, origin):
         '''
         Define switch with values.
         String var_name - variable name to define for var_dict.
@@ -104,4 +104,4 @@ class Switch:
         is_close = status
 
         var_dict[var_name] = Switch(
-            name=var_name, is_close=is_close, is_open=is_open, status=status, platform='dt')
+            name=var_name, is_close=is_close, is_open=is_open, status=status, platform='dt', origin=origin)

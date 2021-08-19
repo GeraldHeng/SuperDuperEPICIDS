@@ -155,7 +155,7 @@ class Ied:
                                  power_real, origin)
 
     @staticmethod
-    def define_ied_dt(var_name, values, var_dict):
+    def define_ied_dt(var_name, values, var_dict, origin):
         '''
         Define ied with values.
         @Param 
@@ -163,7 +163,6 @@ class Ied:
         String var_name - variable name to define for var_dict.
         Dict var_dict - store switch/ied object.
         '''
-        print(var_name)
         # I (current)
         current = np.array(
             [values['Ia'], values['Ib'], values['Ic']])
@@ -173,4 +172,4 @@ class Ied:
             [values['Vca'], values['Vbc'], values['Vab']])
 
         var_dict[var_name] = Ied(
-            name=var_name, current=current, voltage=voltage, platform='dt')
+            name=var_name, current=current, voltage=voltage, platform='dt', origin=origin)
